@@ -9,6 +9,8 @@ import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.com
 import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
+import { DropdownDirective } from './shared/dropdown.directive';
+import { NavbarToggleDirective } from './shared/navbarToggle.directive';
 
 @NgModule({
   declarations: [
@@ -20,12 +22,14 @@ import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-ed
     RecipeItemComponent,
     ShoppingListComponent,
     ShoppingEditComponent,
-    // Remove AppComponent from declarations array
+    DropdownDirective,
+    NavbarToggleDirective
+
   ],
   imports: [
     BrowserModule,
-    // Import AppComponent here
   ],
+
   providers: [],
   bootstrap: [AppComponent]
 })
