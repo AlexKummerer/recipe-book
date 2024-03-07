@@ -1,9 +1,10 @@
 export class Ingredient {
+  name: string;
+  amount: number;
 
-
-  constructor(public name: string, public amount: number) {
+  constructor(name: string, amount: number) {
     this.name = name;
-    this.amount = amount;
+    this.amount = parseInt(amount.toString());
 
   }
 }
