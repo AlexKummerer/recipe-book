@@ -6,7 +6,7 @@
 <div class="row" data-bs-theme="dark">
   <div class="col-xs-12" data-bs-theme="dark">
     @for (recipe of recipes; track recipe.id) {
-    <app-recipe-item data-bs-theme="dark" [recipe]="recipe" (recipeSelected)="onRecipeSelected(recipe)"></app-recipe-item>
+    <app-recipe-item data-bs-theme="dark" [recipe]="recipe" ></app-recipe-item>
     }
   </div>
 </div>
