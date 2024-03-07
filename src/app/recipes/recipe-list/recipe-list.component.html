@@ -1,12 +1,12 @@
-<div class="row">
-  <div class="col-xs-12">
+<div class="row" data-bs-theme="dark">
+  <div class="col-xs-12" data-bs-theme="dark">
     <button class="btn btn-success">New Recipe</button>
   </div>
 </div>
-<div class="row">
-  <div class="col-xs-12">
+<div class="row" data-bs-theme="dark">
+  <div class="col-xs-12" data-bs-theme="dark">
     @for (recipe of recipes; track recipe.id) {
-    <app-recipe-item [recipe]="recipe"></app-recipe-item>
+    <app-recipe-item data-bs-theme="dark" [recipe]="recipe"></app-recipe-item>
     }
   </div>
 </div>
