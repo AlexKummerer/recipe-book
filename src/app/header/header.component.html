@@ -15,12 +15,18 @@
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="#" (click)="onSelected('recipe')"
+          <a
+            class="nav-link"
+            [routerLink]="['/recipes']"
+            routerLinkActive="active"
             >Recipes</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" (click)="onSelected('shopping-list')"
+          <a
+            class="nav-link"
+            [routerLink]="['/shopping-list']"
+            routerLinkActive="active"
             >Shopping List</a
           >
         </li>
@@ -28,14 +34,14 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" appDropdown>
           <a
-            href="#"
-            class="dropdown-toggle"
+            style="cursor: pointer"
+            class="dropdown-toggle nav-item"
             role="button"
             aria-haspopup="true"
             aria-expanded="false"
             >Manage <span class="caret"></span
           ></a>
-          <ul class="dropdown-menu" style="right: 0;">
+          <ul class="dropdown-menu" style="right: 0">
             <li>
               <a class="dropdown-item" href="#">Save Data</a>
             </li>

@@ -1,4 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+
+$color-mode-type: data;
+// @include color-mode(dark)
+// {
+//   :root {
+//     --background-color: #333;
+//     --text-color: #fff;
+//   }
+// }
+
+:root {
+  --bs-primary-rgb: 255, 255, 255;
+}
+
+body.dark {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.dark .btn-primary {
+  background-color: #fff;
+  color: #343a40;
+}
+
+.dark .btn-primary:hover {
+  background-color: #e9ecef;
+}
+
 .dropdown-menu {
   top: 100%;
 }

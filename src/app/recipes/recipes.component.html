@@ -1,14 +1,8 @@
 <div class="row" data-bs-theme="dark">
   <div class="col-md-5" data-bs-theme="dark">
-    <app-recipe-list
-
-    ></app-recipe-list>
+    <app-recipe-list></app-recipe-list>
   </div>
   <div class="col-md-7" data-bs-theme="dark">
-    @if ( selectedRecipe ){
-    <app-recipe-detail [recipe]="selectedRecipe"></app-recipe-detail>
-    } @else {
-        <h3>Please select a recipe</h3>
-    }
+    <router-outlet></router-outlet>
   </div>
 </div>

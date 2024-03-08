@@ -1,7 +1,19 @@
-<a href="#" class="list-group-item clearfix" (click)="onSelected()" data-bs-theme="dark">
+<a
+  style="cursor: pointer ;"
+  class="list-group-item"
+  routerLink="{{ recipe.id }}"
+  clearfix
+  routerLinkActive="active"
+  data-bs-theme="dark"
+  aria-current="true"
+>
   <div class="pull-lefts" data-bs-theme="dark">
-    <h4 class="list-group-item-heading" data-bs-theme="dark">{{ recipe.name }}</h4>
-    <p class="list-group-item-text" data-bs-theme="dark">{{ recipe.description }}</p>
+    <h4 class="list-group-item-heading" data-bs-theme="dark">
+      {{ recipe.name }}
+    </h4>
+    <p class="list-group-item-text" data-bs-theme="dark">
+      {{ recipe.description }}
+    </p>
   </div>
   <span class="pull-right" data-bs-theme="dark">
     <img

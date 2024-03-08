@@ -11,7 +11,7 @@ export class RecipeService {
 
   private recipes: Recipe[] = [
     new Recipe(
-      uuid.v4(),
+      'a2bd98f1-7d8f-4a48-9de3-5037b3ebafa6',
       'A Test Recipe',
       'This is simply a test',
       'https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_960_720.jpg',
@@ -27,7 +27,7 @@ export class RecipeService {
     ),
 
     new Recipe(
-      uuid.v4(),
+     "8012ecd3-93bd-4987-9013-a2fc9b3508b6",
       'Second Test Recipe',
       'This is second simply a test',
       'https://cdn.pixabay.com/photo/2017/06/02/18/24/watermelon-2367029_960_720.jpg',
@@ -44,7 +44,7 @@ export class RecipeService {
     ),
   ];
 
-  constructor(private shListService : ShoppingListService) {}
+  constructor(private shListService: ShoppingListService) {}
 
   getRecipes() {
     return this.recipes.slice();
@@ -54,5 +54,13 @@ export class RecipeService {
     this.shListService.addIngredients(ingredients);
     console.log('addIngredientsToShoppingList');
     console.log(ingredients);
+  }
+
+  getRecipeById(id: string): Recipe {
+    console.log(id);
+
+    return this.recipes.find((recipe) => {
+      return recipe.id === id;
+    });
   }
 }
