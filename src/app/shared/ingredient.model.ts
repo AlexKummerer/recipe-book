@@ -4,7 +4,6 @@ export class Ingredient {
 
   constructor(name: string, amount: number) {
     this.name = name;
-    this.amount = parseInt(amount.toString());
-
+    this.amount = amount
   }
 }
