@@ -37,7 +37,12 @@
           >
         </li>
         <li>
-          <a class="dropdown-item" style="cursor: pointer">Edit Recipe</a>
+          <a
+            class="dropdown-item"
+            style="cursor: pointer"
+            routerLink="edit"
+            >Edit Recipe</a
+          >
         </li>
         <li>
           <a class="dropdown-item" style="cursor: pointer">Delete Recipe</a>
@@ -58,6 +63,5 @@
   </div>
 </div>
 } @else {
-  <app-recipe-start>  </app-recipe-start>
+<app-recipe-start> </app-recipe-start>
 }
-
