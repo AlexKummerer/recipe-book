@@ -8,6 +8,7 @@ import { ShoppingListService } from './shopping-list.service';
   styleUrl: './shopping-list.component.scss',
 })
 export class ShoppingListComponent implements OnInit {
+
   public ingredients: Ingredient[] = [];
 
 
@@ -22,6 +23,12 @@ export class ShoppingListComponent implements OnInit {
     );
   }
 
+  onSelectedIngredient(index: number) {
+    console.log(index);
+    this.shoppingListService.selectIngredient(index);
+
+
+    }
 
 
   onIngredientAdded(ingredient: Ingredient) {

@@ -9,6 +9,7 @@ import { FormBuilder } from '@angular/forms';
   styleUrl: './shopping-edit.component.scss',
 })
 export class ShoppingEditComponent implements OnInit {
+  editMode = false;
   constructor(
     private shoppingListService: ShoppingListService,
     private formBuilder: FormBuilder
@@ -16,19 +17,33 @@ export class ShoppingEditComponent implements OnInit {
 
   ingredientForm = this.formBuilder.group({
     name: ['', Validators.required],
-    amount: [0.5, [Validators.required, Validators.min(1),  ]  ],
+    amount: [0, [Validators.required, Validators.min(0.1)]],
   });
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.shoppingListService.onSelectedIngredient.subscribe(
+      (ingredient: Ingredient) => {
+        this.ingredientForm.setValue({
+          name: ingredient.name,
+          amount: ingredient.amount,
+        });
+        this.editMode = true;
+      }
+    );
+  }
 
-  onAddItem() {
+  onDeleteItem() {
+    this.shoppingListService.deleteIngredient();
+    this.onClear();
+  }
+
+  onUpdatedItem() {
     if (this.ingredientForm.valid) {
-
-      const newIngredient: Ingredient = new Ingredient(
+      const updatedIngredient: Ingredient = new Ingredient(
         this.ingredientForm.value.name,
         +this.ingredientForm.value.amount
       );
-      this.shoppingListService.addIngredient(newIngredient);
+      this.shoppingListService.updateIngredient(updatedIngredient);
     } else if (this.ingredientForm.invalid) {
       if (this.ingredientForm.get('name').invalid) {
         alert('Please enter a valid name');
@@ -37,8 +52,28 @@ export class ShoppingEditComponent implements OnInit {
         alert('Please enter a valid amount');
       }
     }
-
   }
 
+  onAddItem() {
+    if (this.ingredientForm.valid) {
+      const newIngredient: Ingredient = new Ingredient(
+        this.ingredientForm.value.name,
+        +this.ingredientForm.value.amount
+      );
+      this.shoppingListService.addIngredient(newIngredient);
+      this.onClear();
+    } else if (this.ingredientForm.invalid) {
+      if (this.ingredientForm.get('name').invalid) {
+        alert('Please enter a valid name');
+      }
+      if (this.ingredientForm.get('amount').invalid) {
+        alert('Please enter a valid amount');
+      }
+    }
+  }
 
+  onClear() {
+    this.ingredientForm.reset();
+    this.editMode = false;
+  }
 }

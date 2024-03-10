@@ -1,6 +1,9 @@
 <div class="row" data-bs-theme="dark">
   <div class="col-xs-12">
-    <form [formGroup]="ingredientForm" (ngSubmit)="onAddItem()">
+    <form
+      [formGroup]="ingredientForm"
+      (ngSubmit)="editMode ? onUpdatedItem() : onAddItem()"
+    >
       <div class="row">
         <div class="col-xs-4 form-group">
           <label for="name">Name</label>
@@ -50,10 +53,19 @@
             [disabled]="ingredientForm.invalid"
             type="submit"
           >
-            Add
+            {{ editMode ? "Update" : "Add" }}
           </button>
-          <button class="btn btn-danger" type="button">Delete</button>
-          <button class="btn btn-primary" type="button">Clear</button>
+          @if(editMode ) {<button
+            class="btn btn-danger"
+            type="button"
+            (click)="onDeleteItem()"
+          >
+            Delete
+          </button>
+          }
+          <button class="btn btn-primary" type="button" (click)="onClear()">
+            Clear
+          </button>
         </div>
       </div>
     </form>
