@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Ingredient } from '../../shared/ingredient.model';
 import { RecipeService } from '../recipe.service';
@@ -16,9 +16,10 @@ export class RecipeEditComponent {
   ingredients: Ingredient[] = [];
 
   constructor(
-    private router: ActivatedRoute,
+    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private router : Router
   ) {}
 
   recipeForm = this.formBuilder.group({
@@ -46,7 +47,7 @@ export class RecipeEditComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.router.paramMap.subscribe((params) => {
+    this.route.paramMap.subscribe((params) => {
       if (params.has('id')) {
         this.id = params.get('id');
         this.editMode = params.get('id') != null;
@@ -141,5 +142,12 @@ export class RecipeEditComponent {
     }
 
     console.log(this.recipeForm);
+  }
+
+  onCancel() {
+    this.recipeForm.reset();
+    this.editMode = false;
+    this.router.navigate(['../'], { relativeTo: this.route });
+
   }
 }

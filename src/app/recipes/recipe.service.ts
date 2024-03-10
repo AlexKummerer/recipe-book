@@ -82,4 +82,15 @@ export class RecipeService {
     }
     this.recipesChanged.next(this.recipes.slice());
   }
+
+  deleteRecipe(index: string) {
+    let recipeIndex = this.recipes.findIndex((recipe) => {
+      return recipe.id === index;
+    });
+
+    if (recipeIndex !== -1) {
+      this.recipes.splice(recipeIndex, 1);
+    }
+    this.recipesChanged.next(this.recipes.slice());
+  }
 }
