@@ -1,11 +1,14 @@
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
+import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
+
+  recipesChanged = new Subject<Recipe[]>();
 
   private recipes: Recipe[] = [
     new Recipe(
@@ -25,7 +28,7 @@ export class RecipeService {
     ),
 
     new Recipe(
-     "8012ecd3-93bd-4987-9013-a2fc9b3508b6",
+      '8012ecd3-93bd-4987-9013-a2fc9b3508b6',
       'Second Test Recipe',
       'This is second simply a test',
       'https://cdn.pixabay.com/photo/2017/06/02/18/24/watermelon-2367029_960_720.jpg',
@@ -60,5 +63,23 @@ export class RecipeService {
     return this.recipes.find((recipe) => {
       return recipe.id === id;
     });
+  }
+
+  addRecipe(recipe: Recipe) {
+    this.recipes.push(recipe);
+    console.log(this.recipes);
+    this.recipesChanged.next(this.recipes.slice());
+
+  }
+
+  updateRecipe(index: string, newRecipe: Recipe) {
+    let recipeIndex = this.recipes.findIndex((recipe) => {
+      return recipe.id === index;
+    });
+
+    if (recipeIndex !== -1) {
+      this.recipes[recipeIndex] = newRecipe;
+    }
+    this.recipesChanged.next(this.recipes.slice());
   }
 }
