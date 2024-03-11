@@ -147,7 +147,7 @@ export class RecipeEditComponent {
   onCancel() {
     this.recipeForm.reset();
     this.editMode = false;
-    this.router.navigate(['../'], { relativeTo: this.route });
+
 
   }
 }
