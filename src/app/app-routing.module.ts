@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeResolverService } from './recipes/recipe-resolver.service';
+import { AuthModule } from './auth/auth.module'; // Import the missing module
 
 const routes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
     ],
   },
   { path: 'shopping-list', component: ShoppingListComponent },
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) }
 ];
 
 @NgModule({

@@ -17,9 +17,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AuthModule } from './auth/auth.module';
 
 
 let firebaseConfig: {
@@ -55,7 +54,7 @@ let firebaseConfig: {
     ReactiveFormsModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-
+    AuthModule
 
   ],
 
