@@ -19,17 +19,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AuthModule } from './auth/auth.module';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
-
-let firebaseConfig: {
-  apiKey: "AIzaSyADm_m0_4pcyiUofhis-czN_R4fcaAAdMw",
-  authDomain: "ng-course-recipebook-92213.firebaseapp.com",
-  projectId: "ng-course-recipebook-92213",
-  storageBucket: "ng-course-recipebook-92213.appspot.com",
-  messagingSenderId: "678515305136",
-  appId: "1:678515305136:web:097d5b078365c70d67e975",
-  measurementId: "G-11TKBD59J9"
-}
+// provideFirebaseApp(() => initializeApp(environment.firebaseConfig));
 
 @NgModule({
   declarations: [
@@ -44,22 +39,26 @@ let firebaseConfig: {
     DropdownDirective,
     NavbarToggleDirective,
     RecipeStartComponent,
-    RecipeEditComponent
-
+    RecipeEditComponent,
   ],
   imports: [
     BrowserModule,
+
     AppRoutingModule,
     FormsModule,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
     ReactiveFormsModule,
     HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AuthModule
-
+    AuthModule,
   ],
 
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
+  constructor() {
+
+  }
 }
