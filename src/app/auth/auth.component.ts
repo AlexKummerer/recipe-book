@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthResponse, AuthService } from './auth.service';
+import { Observable, from } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -9,6 +10,8 @@ import { AuthService } from './auth.service';
 })
 export class AuthComponent {
   isLoginMode: boolean = true;
+  isLoading = false;
+  error: string = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -21,7 +24,9 @@ export class AuthComponent {
   });
 
   async onSubmit() {
-
+    this.error = null;
+    let authObs: Observable<AuthResponse | Error>;
+    this.isLoading = true;
     if (this.authForm.invalid) {
       if (this.authForm.get('email').invalid) {
         alert('Please enter a valid email');
@@ -33,30 +38,38 @@ export class AuthComponent {
 
     if (this.authForm.valid) {
       if (this.isLoginMode) {
-        await this.authService.login(
-          this.authForm.value.email,
-          this.authForm.value.password
+        authObs = from(
+          this.authService.login(
+            this.authForm.value.email,
+            this.authForm.value.password
+          )
         );
-
-
-        console.log('Login Mode');
-      } else if (!this.isLoginMode) {
-        await this.authService.signUp(
-          this.authForm.value.email,
-          this.authForm.value.password
+      } else {
+        authObs = from(
+          this.authService.signUp(
+            this.authForm.value.email,
+            this.authForm.value.password
+          )
         );
-
-        console.log('Signup Mode');
-
       }
-
+      authObs.subscribe({
+        next: (user) => {
+          console.log(user);
+        },
+        error: (error) => {
+          this.error = error;
+          console.log(this.error);
+        },
+        complete: () => {
+          console.log('Complete');
+        },
+      });
     }
 
-
+    this.isLoading = false;
   }
 
   onSwitchMode() {
-
     this.isLoginMode = !this.isLoginMode;
   }
 }

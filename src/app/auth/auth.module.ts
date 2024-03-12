@@ -10,6 +10,8 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { LoadingSpinnerComponent } from '../shared/loading-spinner/loading-spinner.component';
+import { CommonModule } from '@angular/common';
 // import {AngularFireAuthGuardModule} from '@angular/fire/compat/auth';
 // import * as firebase from 'firebase/compat';
 
@@ -21,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AuthComponent],
+  declarations: [AuthComponent, LoadingSpinnerComponent],
   imports: [
     RouterModule.forChild(routes),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
@@ -29,9 +31,9 @@ const routes: Routes = [
     provideFirestore(() => getFirestore()),
     FormsModule,
     ReactiveFormsModule,
-
+    CommonModule
   ],
-  exports: [RouterModule, AuthComponent],
+  exports: [ AuthComponent, LoadingSpinnerComponent],
   providers: [
     // AngularFireModule.initializeApp(environment.firebaseConfig),
     // provideAuth(() => getAuth()),

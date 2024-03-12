@@ -1,14 +1,19 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
     <h1>Please sign up to use the recipe book</h1>
-    <form (ngSubmit)="onSubmit()" [formGroup]="authForm">
+    <p > {{isLoginMode ? 'Login to your account' : 'Sign Up' }}</p>
+    <div>
+      <p *ngIf="error" class="alert alert-danger">{{ error }}</p>
+    </div>
+    <div>
+      <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="authForm" *ngIf="!isLoading">
       <div class="form-group">
         <label for="email">Email</label>
         <input
-        [attr.type]="
-            authForm.get('email').value.length < 1
-              ? 'username'
-              : 'email'
+          [attr.type]="
+            authForm.get('email').value.length < 1 ? 'username' : 'email'
           "
           type="email"
           id="email"

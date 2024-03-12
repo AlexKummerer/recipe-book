@@ -18,6 +18,15 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
+import {
+  Observable,
+  catchError,
+  from,
+  lastValueFrom,
+  map,
+  throwError,
+} from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface User {
   email: string;
@@ -36,7 +45,7 @@ interface LoggedInUser {
   tenantId?: string;
 }
 
-interface AuthResponse {
+export interface AuthResponse {
   kind: string;
   idToken: string;
   email: string;
@@ -74,61 +83,80 @@ export class AuthService {
 
   constructor() {}
 
-  async signUp(email: string, password: string) {
-    // const db = getFirestore(app);
-
-    // const app = getApp();
-
+  async signUp(email: string, password: string): Promise<AuthResponse | Error> {
     const auth = getAuth();
-    console.log(auth);
 
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential: UserCredential) => {
-        // Signed up
-        console.log(userCredential);
-        const user = userCredential.user;
-
-        this.currentUser = userCredential.user;
-        this.authResponse = userCredential['_tokenResponse'];
-                  // ...
+    return lastValueFrom(
+      new Observable<AuthResponse | Error>((observer) => {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential: UserCredential) => {
+            const resp: AuthResponse = userCredential['_tokenResponse'];
+            observer.next(resp);
+            observer.complete();
+          })
+          .catch((error) => {
+            console.log(error);
+            observer.error(this.handleErrors(error));
+          });
       })
-      .catch((error) => {
-        console.log(error);
-
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
-  }
-  onAuthStateChanged() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user);
-
-        console.log('User is signed in');
-      } else {
-        console.log('User is signed out');
-      }
-    });
+    );
   }
 
   async login(email: string, password: string) {
     const auth = getAuth();
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        return user;
-        // ...
+
+    return lastValueFrom(
+      new Observable<AuthResponse | Error>((observer) => {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const resp: AuthResponse = userCredential['_tokenResponse'];
+            observer.next(resp);
+            observer.complete();
+            // ...
+          })
+          .catch((error) => {
+            observer.error(this.handleErrors(error));
+            console.log(error);
+          });
       })
-      .catch((error) => {
-        console.log(error);
-        return error;
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+    );
+  }
+
+  handleErrors(error) {
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        return new Error('E-Mail bereits verwendet');
+        break;
+      case 'auth/invalid-email':
+        return new Error('Ungültige E-Mail');
+        break;
+      case 'auth/user-disabled':
+        return new Error('Benutzer deaktiviert');
+        break;
+      case 'auth/invalid-credential':
+        return new Error('Ungültige Anmeldeinformationen');
+        break;
+      case 'auth/operation-not-allowed':
+        return new Error('Operation nicht erlaubt');
+        break;
+      case 'auth/weak-password':
+        return new Error('Schwaches Passwort');
+        break;
+      case 'auth/user-not-found':
+        return new Error('Benutzer nicht gefunden');
+        break;
+      case 'auth/wrong-password':
+        return new Error('Falsches Passwort');
+        break;
+      case 'auth/too-many-requests':
+        return new Error('Zu viele Anfragen');
+        break;
+
+      default:
+        return new Error('Ein Fehler ist aufgetreten');
+        break;
+    }
   }
 
   logout() {
