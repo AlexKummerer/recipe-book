@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthResponse, AuthService } from './auth.service';
 import { Observable, from } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -15,7 +16,8 @@ export class AuthComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   authForm = this.formBuilder.group({
@@ -54,19 +56,22 @@ export class AuthComponent {
       }
       authObs.subscribe({
         next: (user) => {
+          this.router.navigate(['/recipes']);
           console.log(user);
+          this.isLoading = false;
+
         },
         error: (error) => {
           this.error = error;
           console.log(this.error);
+          this.isLoading = false;
+
         },
         complete: () => {
           console.log('Complete');
         },
       });
     }
-
-    this.isLoading = false;
   }
 
   onSwitchMode() {

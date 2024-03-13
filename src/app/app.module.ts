@@ -15,16 +15,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { AngularFireModule } from '@angular/fire/compat';
 import { AuthModule } from './auth/auth.module';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-
-// provideFirebaseApp(() => initializeApp(environment.firebaseConfig));
+import { ShoppingListService } from './shopping-list/shopping-list.service';
+import { RecipeService } from './recipes/recipe.service';
+import { AuthGuard } from './auth/auth.guard';
 
 @NgModule({
   declarations: [
@@ -54,11 +53,9 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
     AuthModule,
   ],
 
-  providers: [],
+  providers: [ShoppingListService, RecipeService, AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor() {
-
-  }
+  constructor() {}
 }

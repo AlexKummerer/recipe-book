@@ -14,23 +14,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"     routerLinkActive="active" >
-          <a
-            class="nav-link"
-            [routerLink]="['/recipes']"
-
-            >Recipes</a
-          >
+        @if (isAuthenticated) {
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/recipes']">Recipes</a>
         </li>
-        <li class="nav-item"      routerLinkActive="active">
-          <a
-            class="nav-link"
-            [routerLink]="['/auth']"
-
-            >Authenticate</a
-          >
+        } @if(!isAuthenticated) {
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/auth']">Authenticate</a>
         </li>
-        <li class="nav-item"      routerLinkActive="active">
+        }
+
+        <li class="nav-item" routerLinkActive="active">
           <a
             class="nav-link"
             [routerLink]="['/shopping-list']"
@@ -40,25 +34,32 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown" appDropdown>
+        @if(isAuthenticated) {
+        <li>
+          <a class="nav-link" style="cursor: pointer" (click)="onLogout()"
+            >Logout</a
+          >
+        </li>
+
+        <li class="dropdown nav-item" appDropdown>
           <a
             style="cursor: pointer"
-            class="dropdown-toggle nav-item"
+            class="dropdown-toggle nav-link"
             role="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-            >Manage <span class="caret"></span
-          ></a>
+
+
+            >Manage </a>
           <ul class="dropdown-menu" style="right: 0">
             <li>
               <a class="dropdown-item" (click)="onSaveData()">Save Data</a>
             </li>
             <li>
-              <a class="dropdown-item" (click)="onFetchData()" >Fetch Data</a>
+              <a class="dropdown-item" (click)="onFetchData()">Fetch Data</a>
             </li>
           </ul>
-          <!-- </li> -->
+
         </li>
+        }
       </ul>
     </div>
   </div>

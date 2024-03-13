@@ -1,37 +1,17 @@
 import { Injectable } from '@angular/core';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
   UserCredential,
 } from 'firebase/auth';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { inject } from '@angular/core';
-import {
-  collection,
-  doc,
-  Firestore,
-  onSnapshot,
-  query,
-  where,
-} from '@angular/fire/firestore';
-import {
-  Observable,
-  catchError,
-  from,
-  lastValueFrom,
-  map,
-  throwError,
-} from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 
-interface User {
-  email: string;
-  password: string;
-}
+import { inject } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
+import { User } from './user.model';
+import { Router } from '@angular/router';
 
 interface LoggedInUser {
   localId?: string;
@@ -59,6 +39,8 @@ export interface AuthResponse {
 })
 export class AuthService {
   firestore: Firestore = inject(Firestore);
+  user = new BehaviorSubject<User>(null);
+  private tokenExpirationTimer: any;
 
   currentUser: LoggedInUser = {
     email: '',
@@ -81,7 +63,7 @@ export class AuthService {
     localId: '',
   };
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   async signUp(email: string, password: string): Promise<AuthResponse | Error> {
     const auth = getAuth();
@@ -91,6 +73,13 @@ export class AuthService {
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential: UserCredential) => {
             const resp: AuthResponse = userCredential['_tokenResponse'];
+
+            this.handleAuthentification(
+              userCredential.user.email,
+              userCredential.user.uid,
+              resp.idToken,
+              +resp.expiresIn
+            );
             observer.next(resp);
             observer.complete();
           })
@@ -111,6 +100,12 @@ export class AuthService {
           .then((userCredential) => {
             // Signed in
             const resp: AuthResponse = userCredential['_tokenResponse'];
+            this.handleAuthentification(
+              userCredential.user.email,
+              userCredential.user.uid,
+              resp.idToken,
+              +resp.expiresIn
+            );
             observer.next(resp);
             observer.complete();
             // ...
@@ -123,7 +118,47 @@ export class AuthService {
     );
   }
 
-  handleErrors(error) {
+  autoLogin() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (!userData) {
+      return;
+    }
+    const loadedUser = new User(
+      userData.email,
+      userData.id,
+      userData._token,
+      new Date(userData._tokenExpirationDate)
+    );
+
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+      const expirationDuration =
+        new Date(userData._tokenExpirationDate).getTime() -
+        new Date().getTime();
+      this.autoLogout(expirationDuration);
+    }
+  }
+
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
+  }
+
+  private handleAuthentification(
+    email: string,
+    userId: string,
+    token: string | null,
+    expiresIn: number
+  ) {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(email, userId, token, expirationDate);
+    this.user.next(user);
+    this.autoLogout(expiresIn * 1000);
+    localStorage.setItem('userData', JSON.stringify(user));
+  }
+
+  private handleErrors(error) {
     switch (error.code) {
       case 'auth/email-already-in-use':
         return new Error('E-Mail bereits verwendet');
@@ -159,14 +194,20 @@ export class AuthService {
     }
   }
 
-  logout() {
+  public logout() {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        // Sign-out successful.
+        this.user.next(null);
+        this.router.navigate(['/auth']);
+        localStorage.removeItem('userData');
+        if (this.tokenExpirationTimer) {
+          clearTimeout(this.tokenExpirationTimer);
+        }
+        this.tokenExpirationTimer = null;
       })
       .catch((error) => {
-        // An error happened.
+        console.log(error);
       });
   }
 }

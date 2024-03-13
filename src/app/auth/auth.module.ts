@@ -12,6 +12,8 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { LoadingSpinnerComponent } from '../shared/loading-spinner/loading-spinner.component';
 import { CommonModule } from '@angular/common';
+import { _AuthInterceptorService } from './auth-interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import {AngularFireAuthGuardModule} from '@angular/fire/compat/auth';
 // import * as firebase from 'firebase/compat';
 
@@ -37,6 +39,7 @@ const routes: Routes = [
   providers: [
     // AngularFireModule.initializeApp(environment.firebaseConfig),
     // provideAuth(() => getAuth()),
+    { provide : HTTP_INTERCEPTORS, useClass: _AuthInterceptorService , multi: true}
   ],
   bootstrap: [AuthModule],
 })
