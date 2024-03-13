@@ -24,6 +24,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { ShoppingListService } from './shopping-list/shopping-list.service';
 import { RecipeService } from './recipes/recipe.service';
 import { AuthGuard } from './auth/auth.guard';
+import { AlertComponent } from './shared/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { AuthGuard } from './auth/auth.guard';
     NavbarToggleDirective,
     RecipeStartComponent,
     RecipeEditComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,7 @@ import { AuthGuard } from './auth/auth.guard';
     provideFirestore(() => getFirestore()),
     ReactiveFormsModule,
     HttpClientModule,
-    AuthModule,
+
   ],
 
   providers: [ShoppingListService, RecipeService, AuthGuard],

@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
     <h1>Please sign up to use the recipe book</h1>
-    <p > {{isLoginMode ? 'Login to your account' : 'Sign Up' }}</p>
-    <div>
-      <p *ngIf="error" class="alert alert-danger">{{ error }}</p>
-    </div>
+    <p>{{ isLoginMode ? "Login to your account" : "Sign Up" }}</p>
+
+    <ng-template #modalContainer></ng-template>
+
     <div>
       <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     </div>

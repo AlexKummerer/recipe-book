@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import { AlertComponent } from './../shared/alert/alert.component';
+import {
+  ApplicationRef,
+  Component,
+  ComponentRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthResponse, AuthService } from './auth.service';
 import { Observable, from } from 'rxjs';
@@ -10,6 +17,11 @@ import { Router } from '@angular/router';
   styleUrl: './auth.component.scss',
 })
 export class AuthComponent {
+
+  @ViewChild('modalContainer', { read: ViewContainerRef })
+  modalContainer: ViewContainerRef;
+
+  componentRef: ComponentRef<AlertComponent>;
   isLoginMode: boolean = true;
   isLoading = false;
   error: string = null;
@@ -17,7 +29,8 @@ export class AuthComponent {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    public alert: AlertComponent,
   ) {}
 
   authForm = this.formBuilder.group({
@@ -59,13 +72,11 @@ export class AuthComponent {
           this.router.navigate(['/recipes']);
           console.log(user);
           this.isLoading = false;
-
         },
         error: (error) => {
           this.error = error;
-          console.log(this.error);
+          this.showErrorAlert(error);
           this.isLoading = false;
-
         },
         complete: () => {
           console.log('Complete');
@@ -76,5 +87,28 @@ export class AuthComponent {
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  private showErrorAlert(message: string) {
+    this.error = message;
+    console.log(this.error);
+
+    this.modalContainer.clear();
+
+    const componentFactory =
+      this.modalContainer.createComponent(AlertComponent);
+    this.componentRef = componentFactory;
+
+    this.componentRef.instance.alertMessage = message;
+    this.componentRef.instance.close.subscribe(() => {
+      this.modalContainer.clear();
+      this.error = null;
+    });
+
+
+  }
+
+  onHandleError() {
+    this.error = null;
   }
 }

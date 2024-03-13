@@ -14,6 +14,7 @@ import { LoadingSpinnerComponent } from '../shared/loading-spinner/loading-spinn
 import { CommonModule } from '@angular/common';
 import { _AuthInterceptorService } from './auth-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AlertComponent } from '../shared/alert/alert.component';
 // import {AngularFireAuthGuardModule} from '@angular/fire/compat/auth';
 // import * as firebase from 'firebase/compat';
 
@@ -25,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AuthComponent, LoadingSpinnerComponent],
+  declarations: [AuthComponent, LoadingSpinnerComponent, AlertComponent],
   imports: [
     RouterModule.forChild(routes),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
@@ -33,13 +34,18 @@ const routes: Routes = [
     provideFirestore(() => getFirestore()),
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
   ],
-  exports: [ AuthComponent, LoadingSpinnerComponent],
+  exports: [AuthComponent, LoadingSpinnerComponent, AlertComponent],
   providers: [
-    // AngularFireModule.initializeApp(environment.firebaseConfig),
-    // provideAuth(() => getAuth()),
-    { provide : HTTP_INTERCEPTORS, useClass: _AuthInterceptorService , multi: true}
+
+    {provide: AlertComponent, useClass: AlertComponent},
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: _AuthInterceptorService,
+      multi: true,
+    },
   ],
   bootstrap: [AuthModule],
 })
