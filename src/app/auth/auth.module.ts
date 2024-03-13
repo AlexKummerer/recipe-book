@@ -26,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AuthComponent, LoadingSpinnerComponent, AlertComponent],
+  declarations: [AuthComponent, LoadingSpinnerComponent],
   imports: [
     RouterModule.forChild(routes),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
@@ -36,7 +36,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     CommonModule,
   ],
-  exports: [AuthComponent, LoadingSpinnerComponent, AlertComponent],
+  exports: [AuthComponent, LoadingSpinnerComponent],
   providers: [
 
     {provide: AlertComponent, useClass: AlertComponent},
