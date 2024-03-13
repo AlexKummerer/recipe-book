@@ -6,7 +6,7 @@ import { Recipe } from "../recipes/recipe.model";
 
 
 @Injectable()
-export class _AuthInterceptorService implements HttpInterceptor {
+export class AuthInterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<Recipe[]>, next: HttpHandler) {
     return this.authService.user.pipe(
       take(1),
@@ -14,6 +14,7 @@ export class _AuthInterceptorService implements HttpInterceptor {
         if (!user) {
           return next.handle(req);
         }
+
         const modifiedReq = req.clone({
           params: new HttpParams().set('auth', user.token),
         });
