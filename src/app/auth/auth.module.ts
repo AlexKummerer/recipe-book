@@ -15,8 +15,7 @@ import { CommonModule } from '@angular/common';
 import { _AuthInterceptorService } from './auth-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AlertComponent } from '../shared/alert/alert.component';
-// import {AngularFireAuthGuardModule} from '@angular/fire/compat/auth';
-// import * as firebase from 'firebase/compat';
+
 
 const routes: Routes = [
   {
