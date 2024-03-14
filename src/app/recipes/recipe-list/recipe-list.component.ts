@@ -1,13 +1,10 @@
 import { RecipeService } from './../recipe.service';
 import {
   Component,
-  EventEmitter,
   OnDestroy,
   OnInit,
-  Output,
 } from '@angular/core';
 import { Recipe } from '../recipe.model';
-import * as uuid from 'uuid';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -24,14 +21,9 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.recipes = this.RecipeService.getRecipes();
-    console.log(this.recipes);
 
     this.subscription = this.RecipeService.recipesChanged.subscribe(
       (recipes: Recipe[]) => {
-        console.log(recipes);
-        console.log('RecipeListComponent.ngOnInit.subscribe');
-
-
         this.recipes = recipes;
       }
     );

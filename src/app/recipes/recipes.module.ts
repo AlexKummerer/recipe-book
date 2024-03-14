@@ -41,6 +41,7 @@ import { SharedModule } from '../shared/shared.module';
     DropdownDirective
   ],
   providers: [
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

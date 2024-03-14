@@ -24,7 +24,6 @@ export class AlertComponent {
 
   }
   onHandleClose() {
-    console.log('close');
 
     this.close.emit();
   }

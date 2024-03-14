@@ -15,19 +15,16 @@ export class RecipeService {
   constructor(private shListService: ShoppingListService) {}
 
   getRecipes() {
-    console.log(this.recipes.slice());
 
     return this.recipes.slice();
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
     this.shListService.addIngredients(ingredients);
-    console.log('addIngredientsToShoppingList');
-    console.log(ingredients);
+
   }
 
   getRecipeById(id: string): Recipe {
-    console.log(id);
 
     return this.recipes.find((recipe) => {
       return recipe.id === id;
@@ -36,8 +33,7 @@ export class RecipeService {
 
   addRecipe(recipe: Recipe) {
     this.recipes.push(recipe);
-    console.log(this.recipes);
-    console.log( this.recipesChanged.next(this.recipes.slice()));
+
 
     this.recipesChanged.next(this.recipes.slice());
 
@@ -66,7 +62,6 @@ export class RecipeService {
   }
 
   setRecipes(recipes: Recipe[]) {
-    console.log(recipes);
 
     this.recipes = [...recipes];
     this.recipesChanged.next(this.recipes.slice());

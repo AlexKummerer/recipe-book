@@ -84,7 +84,6 @@ export class AuthService {
             observer.complete();
           })
           .catch((error) => {
-            console.log(error);
             observer.error(this.handleErrors(error));
           });
       })
@@ -112,7 +111,6 @@ export class AuthService {
           })
           .catch((error) => {
             observer.error(this.handleErrors(error));
-            console.log(error);
           });
       })
     );
@@ -139,7 +137,7 @@ export class AuthService {
     }
   }
 
-  autoLogout(expirationDuration: number) {
+  private autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
@@ -207,7 +205,6 @@ export class AuthService {
         this.tokenExpirationTimer = null;
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 }

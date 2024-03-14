@@ -70,7 +70,7 @@ export class AuthComponent {
       authObs.subscribe({
         next: (user) => {
           this.router.navigate(['/recipes']);
-          console.log(user);
+
           this.isLoading = false;
         },
         error: (error) => {
@@ -79,7 +79,6 @@ export class AuthComponent {
           this.isLoading = false;
         },
         complete: () => {
-          console.log('Complete');
         },
       });
     }
@@ -91,7 +90,6 @@ export class AuthComponent {
 
   private showErrorAlert(message: string) {
     this.error = message;
-    console.log(this.error);
 
     this.modalContainer.clear();
 

@@ -4,16 +4,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
 import { Router, RouterModule, Routes } from '@angular/router';
-import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../../environments/environment';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { LoadingSpinnerComponent } from '../shared/loading-spinner/loading-spinner.component';
-import { CommonModule } from '@angular/common';
-import { AuthInterceptorService } from './auth-interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import { AlertComponent } from '../shared/alert/alert.component';
 import { SharedModule } from '../shared/shared.module';
 

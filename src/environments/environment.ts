@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   firebaseConfig: {
     apiKey: "AIzaSyADm_m0_4pcyiUofhis-czN_R4fcaAAdMw",
     authDomain: "ng-course-recipebook-92213.firebaseapp.com",

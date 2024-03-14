@@ -19,7 +19,6 @@ export class AppComponent implements OnInit{
 
 
   onNavigate(feature: string) {
-    console.log(feature);
     this.loadedFeature = feature;
 
   }

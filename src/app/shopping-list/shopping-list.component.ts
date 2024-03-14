@@ -24,7 +24,6 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onSelectedIngredient(index: number) {
-    console.log(index);
     this.shoppingListService.selectIngredient(index);
 
 

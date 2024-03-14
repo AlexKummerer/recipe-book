@@ -19,7 +19,6 @@ export class RecipeEditComponent {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private recipeService: RecipeService,
-    private router : Router
   ) {}
 
   recipeForm = this.formBuilder.group({
@@ -47,13 +46,13 @@ export class RecipeEditComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.route.paramMap.subscribe((params) => {
-      if (params.has('id')) {
-        this.id = params.get('id');
-        this.editMode = params.get('id') != null;
-        this.initForm();
-      }
-    });
+    // this.route.paramMap.subscribe((params) => {
+    //   if (params.has('id')) {
+    //     this.id = params.get('id');
+    //     this.editMode = params.get('id') != null;
+    //     this.initForm();
+    //   }
+    // });
   }
 
   private initForm() {
@@ -66,7 +65,6 @@ export class RecipeEditComponent {
 
     if (this.editMode) {
       const recipe = this.recipeService.getRecipeById(this.id);
-      console.log(recipe);
 
       recipeName = recipe.name;
       recipeImagePath = recipe.imagePath;
@@ -97,7 +95,6 @@ export class RecipeEditComponent {
       ingredients: recipeIngredients,
     });
 
-    console.log(this.recipeForm);
 
   }
 
@@ -119,7 +116,6 @@ export class RecipeEditComponent {
     // throw new Error('Method not implemented.');
   }
   onDeleteIngredient(i: number) {
-    console.log(i);
     (<FormArray>this.recipeForm.get('ingredients')).removeAt(i);
 
   }
@@ -132,7 +128,7 @@ export class RecipeEditComponent {
       this.recipeForm.value.imagePath,
       this.recipeForm.value.ingredients.map((ingredient: any) => new Ingredient(ingredient.name, ingredient.amount))
     );
-    console.log(newRecipe);
+
 
 
     if (this.editMode) {
@@ -141,7 +137,7 @@ export class RecipeEditComponent {
       this.recipeService.addRecipe(newRecipe);
     }
 
-    console.log(this.recipeForm);
+
   }
 
   onCancel() {
