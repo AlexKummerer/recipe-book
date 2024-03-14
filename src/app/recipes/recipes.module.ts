@@ -13,6 +13,8 @@ import { RecipesRoutingModule } from './recipes-routing.module';
 import { RecipeService } from './recipe.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptorService } from '../auth/auth-interceptor';
+import { DropdownDirective } from '../shared/dropdown.directive';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -25,9 +27,9 @@ import { AuthInterceptorService } from '../auth/auth-interceptor';
   ],
   imports: [
     RecipesRoutingModule,
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    SharedModule,
   ],
   exports: [
     RecipesComponent,
@@ -36,6 +38,7 @@ import { AuthInterceptorService } from '../auth/auth-interceptor';
     RecipeItemComponent,
     RecipeStartComponent,
     RecipeEditComponent,
+    DropdownDirective
   ],
   providers: [
     {

@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { AuthInterceptorService } from './auth-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AlertComponent } from '../shared/alert/alert.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 const routes: Routes = [
@@ -25,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AuthComponent, LoadingSpinnerComponent],
+  declarations: [AuthComponent],
   imports: [
     RouterModule.forChild(routes),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
@@ -33,9 +34,10 @@ const routes: Routes = [
     provideFirestore(() => getFirestore()),
     FormsModule,
     ReactiveFormsModule,
-    CommonModule,
+    SharedModule,
+
   ],
-  exports: [AuthComponent, LoadingSpinnerComponent],
+  exports: [AuthComponent],
   providers: [
 
     {provide: AlertComponent, useClass: AlertComponent},

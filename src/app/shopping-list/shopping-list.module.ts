@@ -5,14 +5,15 @@ import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
 import { ShoppingListComponent } from './shopping-list.component';
 import { Route, RouterModule } from '@angular/router';
 import { ShoppingListService } from './shopping-list.service';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Route[] = [{ path: '', component: ShoppingListComponent }];
 
 @NgModule({
   declarations: [ShoppingListComponent, ShoppingEditComponent],
-  imports: [RouterModule.forChild(routes), CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [RouterModule.forChild(routes), SharedModule, FormsModule, ReactiveFormsModule],
   exports: [ShoppingListComponent, ShoppingEditComponent],
-  providers: [ShoppingListService],
+  providers: [],
   bootstrap: [ShoppingListComponent],
 })
 export class ShoppingListModule {}

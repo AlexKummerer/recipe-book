@@ -18,14 +18,11 @@ import { RecipeService } from './recipes/recipe.service';
 import { AuthGuard } from './auth/auth.guard';
 import { RecipesModule } from './recipes/recipes.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
+import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    DropdownDirective,
-    NavbarToggleDirective,
-  ],
+  declarations: [AppComponent, HeaderComponent, NavbarToggleDirective],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -34,10 +31,11 @@ import { ShoppingListModule } from './shopping-list/shopping-list.module';
     provideFirestore(() => getFirestore()),
     HttpClientModule,
     RecipesModule,
-    ShoppingListModule
+    ShoppingListModule,
+    SharedModule,
+    CoreModule,
   ],
 
-  providers: [AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {
