@@ -16,6 +16,8 @@ yarn-error.log
 
 /environments
 
+/.firebase
+
 # IDEs and editors
 .idea/
 .project
