@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AlertComponent } from './alert.component';
+
 
 describe('AlertComponent', () => {
   let component: AlertComponent;
@@ -8,16 +8,20 @@ describe('AlertComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AlertComponent]
-    })
-    .compileComponents();
-    
+      declarations: [AlertComponent],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(AlertComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
+
+  // Add more test cases here...
 });
+
