@@ -1,10 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
 import { ShoppingListComponent } from './shopping-list.component';
 import { Route, RouterModule } from '@angular/router';
-import { ShoppingListService } from './shopping-list.service';
 import { SharedModule } from '../shared/shared.module';
 
 const routes: Route[] = [{ path: '', component: ShoppingListComponent }];
