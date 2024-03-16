@@ -12,6 +12,10 @@ import { Firestore } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
+import * as fromApp from '../store/app.reducer';
+import { Store } from '@ngrx/store';
+import * as AuthActions from './store/auth.actions';
+import { login } from './store/auth.actions';
 
 interface LoggedInUser {
   localId?: string;
@@ -39,7 +43,7 @@ export interface AuthResponse {
 })
 export class AuthService {
   firestore: Firestore = inject(Firestore);
-  user = new BehaviorSubject<User>(null);
+  // user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
   currentUser: LoggedInUser = {
@@ -63,7 +67,7 @@ export class AuthService {
     localId: '',
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private store: Store<fromApp.AppState>) {}
 
   async signUp(email: string, password: string): Promise<AuthResponse | Error> {
     const auth = getAuth();
@@ -129,7 +133,14 @@ export class AuthService {
     );
 
     if (loadedUser.token) {
-      this.user.next(loadedUser);
+      this.store.dispatch(
+        AuthActions.login({
+          email: loadedUser.email,
+          userId: loadedUser.id,
+          token: loadedUser.token,
+          expirationDate: new Date(userData._tokenExpirationDate),
+        })
+      );
       const expirationDuration =
         new Date(userData._tokenExpirationDate).getTime() -
         new Date().getTime();
@@ -151,7 +162,14 @@ export class AuthService {
   ) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
-    this.user.next(user);
+    this.store.dispatch(
+      AuthActions.login({
+        email: email,
+        userId: userId,
+        token: token,
+        expirationDate: expirationDate,
+      })
+    );
     this.autoLogout(expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
   }
@@ -196,7 +214,7 @@ export class AuthService {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        this.user.next(null);
+        this.store.dispatch(AuthActions.logout());
         this.router.navigate(['/auth']);
         localStorage.removeItem('userData');
         if (this.tokenExpirationTimer) {
@@ -204,7 +222,6 @@ export class AuthService {
         }
         this.tokenExpirationTimer = null;
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
 }
