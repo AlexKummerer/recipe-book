@@ -6,6 +6,7 @@ export const LOGIN_START = 'LOGIN_START';
 export const SIGNUP = 'SIGNUP_START';
 export const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS';
 export const AUTHENTICATE_FAIL = 'AUTHENTICATE_FAIL';
+export const AUTO_LOGIN = 'AUTO_LOGIN';
 
 export const logout = createAction(LOGOUT);
 export const loginStart = createAction(
@@ -24,16 +25,7 @@ export const authenticateSuccess = createAction(
   }>()
 );
 
-// export const login = createAction(
-//   LOGIN,
-//   props<{
-//     email: string;
-//     userId: string;
-//     token: string;
-//     expirationDate: Date;
-//   }>()
-// );
-
+export const autoLogin = createAction(AUTO_LOGIN);
 export const signupStart = createAction(
   SIGNUP,
   props<{ email: string; password: string }>()

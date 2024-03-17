@@ -24,9 +24,9 @@ const routes: Routes = [
   declarations: [AuthComponent],
   imports: [
     RouterModule.forChild(routes),
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    // provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    // provideAuth(() => getAuth()),
+    // provideFirestore(() => getFirestore()),
     FormsModule,
     ReactiveFormsModule,
     SharedModule,

@@ -43,28 +43,6 @@ export const authReducer = createReducer(
     };
   }),
 
-  // on(AuthActions.loginStart, (state: State) => {
-  //   return {
-  //     ...state,
-  //     authError: null,
-  //     loading: true,
-  //   };
-  // }),
-
-//   on(AuthActions.authenticateSuccess, (state: State, action) => {
-//     const user = new User(
-//       action.email,
-//       action.userId,
-//       action.token,
-//       action.expirationDate
-//     );
-//     return {
-//       ...state,
-//       user: user,
-//       authError: null,
-//       loading: false,
-//     };
-//   }),
 
   on(AuthActions.authenticateFail, (state: State, action) => {
     return {

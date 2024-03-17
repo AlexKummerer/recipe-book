@@ -1,6 +1,5 @@
 import { AlertComponent } from './../shared/alert/alert.component';
 import {
-  ApplicationRef,
   Component,
   ComponentRef,
   OnInit,
@@ -8,9 +7,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthResponse, AuthService } from './auth.service';
-import { Observable, Subscription, from } from 'rxjs';
-import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
@@ -33,8 +30,6 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
     public alert: AlertComponent,
     private store: Store<fromApp.AppState>
   ) {}
