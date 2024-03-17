@@ -3,6 +3,7 @@ import {
   ApplicationRef,
   Component,
   ComponentRef,
+  OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -10,13 +11,16 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AuthResponse, AuthService } from './auth.service';
 import { Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit{
 
   @ViewChild('modalContainer', { read: ViewContainerRef })
   modalContainer: ViewContainerRef;
@@ -31,7 +35,18 @@ export class AuthComponent {
     private authService: AuthService,
     private router: Router,
     public alert: AlertComponent,
+    private store : Store<fromApp.AppState>
   ) {}
+
+  ngOnInit() {
+    this.store.select('auth').subscribe(authState => {
+      console.log(authState);
+
+      this.isLoading = authState.loading;
+      this.showErrorAlert(authState.authError);
+
+    });
+  }
 
   authForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -53,12 +68,14 @@ export class AuthComponent {
 
     if (this.authForm.valid) {
       if (this.isLoginMode) {
-        authObs = from(
-          this.authService.login(
-            this.authForm.value.email,
-            this.authForm.value.password
-          )
-        );
+        // authObs = from(
+        //   this.authService.login(
+        //     this.authForm.value.email,
+        //     this.authForm.value.password
+        //   )
+        // );
+        this.store.dispatch(AuthActions.loginStart({email: this.authForm.value.email, password: this.authForm.value.password}));
+
       } else {
         authObs = from(
           this.authService.signUp(

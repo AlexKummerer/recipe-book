@@ -66,14 +66,14 @@ export const authReducer = createReducer(
 //     };
 //   }),
 
-//   on(AuthActions.authenticateFail, (state: State, action) => {
-//     return {
-//       ...state,
-//       user: null,
-//       authError: action.errorMessage,
-//       loading: false,
-//     };
-//   }),
+  on(AuthActions.authenticateFail, (state: State, action) => {
+    return {
+      ...state,
+      user: null,
+      authError: action.errorMessage,
+      loading: false,
+    };
+  }),
 
 //   on(AuthActions.signupStart, (state: State) => {
 //     return {

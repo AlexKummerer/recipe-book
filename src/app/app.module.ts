@@ -16,6 +16,8 @@ import { CoreModule } from './core.module';
 
 import * as fromApp from './store/app.reducer';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, NavbarToggleDirective],
@@ -31,6 +33,7 @@ import { StoreModule } from '@ngrx/store';
     SharedModule,
     CoreModule,
     StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects]),
     ],
 
   bootstrap: [AppComponent],
