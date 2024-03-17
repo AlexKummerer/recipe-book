@@ -5,6 +5,7 @@ import { Subscription, map } from 'rxjs';
 import { Router } from '@angular/router';
 import {Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -44,7 +45,8 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.authService.logout();
+    this.store.dispatch(AuthActions.logout());
+
     this.isAuthenticated = false;
   }
 

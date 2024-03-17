@@ -13,9 +13,55 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import { User } from '../user.model';
 
 @Injectable()
 export class AuthEffects {
+  authSignup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.signupStart),
+      switchMap((authData) => {
+        const auth = getAuth();
+        const email = authData.email;
+        const password = authData.password;
+
+        return from(createUserWithEmailAndPassword(auth, email, password)).pipe(
+          tap(() => {
+            // this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+          }),
+          map((resData) => {
+            return this.handleAuthentication(
+              +resData['_tokenResponse'].expiresIn,
+              resData.user.email,
+              resData.user.uid,
+              resData['_tokenResponse'].idToken
+            );
+          }),
+          catchError((errorRes) => {
+            return this.handleErrors(errorRes);
+          })
+        );
+      })
+    )
+  );
+
+  handleAuthentication = (
+    expiresIn: number,
+    email: string,
+    userId: string,
+    token: string
+  ) => {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(email, userId, token, expirationDate);
+    localStorage.setItem('userData', JSON.stringify(user));
+    return AuthActions.authenticateSuccess({
+      email: email,
+      userId: userId,
+      token: token,
+      expirationDate: expirationDate,
+    });
+  };
+
   authlogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginStart),
@@ -29,17 +75,12 @@ export class AuthEffects {
             // this.authService.setLogoutTimer(+resData.expiresIn * 1000);
           }),
           map((resData) => {
-            const resp: AuthResponse = resData['_tokenResponse'];
-            const expirationDate = new Date(
-              new Date().getTime() + +resp.expiresIn * 1000
+            return this.handleAuthentication(
+              +resData['_tokenResponse'].expiresIn,
+              resData.user.email,
+              resData.user.uid,
+              resData['_tokenResponse'].idToken
             );
-
-            return AuthActions.login({
-              email: resData.user.email,
-              userId: resData.user.uid,
-              token: resp.idToken,
-              expirationDate: expirationDate,
-            });
           }),
 
           catchError((errorRes) => {
@@ -53,7 +94,7 @@ export class AuthEffects {
   authRedirect$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthActions.LOGIN),
+        ofType(AuthActions.loginStart, AuthActions.logout),
         tap(() => {
           this.router.navigate(['/']);
         })
@@ -61,16 +102,7 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  authSuceess$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AuthActions.LOGIN),
-        tap(() => {
-          this.router.navigate(['/']);
-        })
-      ),
-    { dispatch: false }
-  );
+
 
   // authLogout$ = createEffect(
   //   () =>
@@ -85,41 +117,9 @@ export class AuthEffects {
   //   { dispatch: false }
   // );
 
-  // authSignup$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(AuthActions.signupStart),
-  //     switchMap((authData) => {
-  //       return this.http
-  //         .post<AuthResponseData>(
-  //           'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' +
-  //             environment.firebaseConfig.apiKey,
-  //           {
-  //             email: authData.email,
-  //             password: authData.password,
-  //             returnSecureToken: true,
-  //           }
-  //         )
-  //         .pipe(
-  //           tap((resData) => {
-  //             this.authService.setLogoutTimer(+resData.expiresIn * 1000);
-  //           }),
-  //           map((resData) => {
-  //             return handleAuthentication(
-  //               +resData.expiresIn,
-  //               resData.email,
-  //               resData.localId,
-  //               resData.idToken
-  //             );
-  //           }),
-  //           catchError((errorRes) => {
-  //             return handleError(errorRes);
-  //           })
-  //         );
-  //     })
-  //   )
-  // );
 
-  private handleErrors(errorRes) {
+
+  handleErrors = (errorRes) => {
     let errorMessage = 'An unknown error occurred!';
     if (!errorRes.code) {
       errorMessage = 'An unknown error occurred!';
@@ -156,7 +156,7 @@ export class AuthEffects {
     }
 
     return of(AuthActions.authenticateFail({ errorMessage }));
-  }
+  };
 
   constructor(
     private actions$: Actions,

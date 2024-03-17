@@ -19,7 +19,7 @@ const initialState : State = {
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.login, (state: State, action) => {
+  on(AuthActions.authenticateSuccess, (state: State, action) => {
     const user = new User(
       action.email,
       action.userId,
@@ -75,19 +75,19 @@ export const authReducer = createReducer(
     };
   }),
 
-//   on(AuthActions.signupStart, (state: State) => {
-//     return {
-//       ...state,
-//       authError: null,
-//       loading: true,
-//     };
-//   }),
+  on(AuthActions.signupStart, (state: State) => {
+    return {
+      ...state,
+      authError: null,
+      loading: true,
+    };
+  }),
 
-//   on(AuthActions.clearError, (state: State) => {
-//     return {
-//       ...state,
-//       authError: null,
-//     };
-//   })
-// );
-)
+  on(AuthActions.clearError, (state: State) => {
+    return {
+      ...state,
+      authError: null,
+    };
+  })
+);
+

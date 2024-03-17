@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 import * as fromApp from '../store/app.reducer';
 import { Store } from '@ngrx/store';
 import * as AuthActions from './store/auth.actions';
-import { login } from './store/auth.actions';
 
 interface LoggedInUser {
   localId?: string;
@@ -69,56 +68,8 @@ export class AuthService {
 
   constructor(private router: Router, private store: Store<fromApp.AppState>) {}
 
-  async signUp(email: string, password: string): Promise<AuthResponse | Error> {
-    const auth = getAuth();
 
-    return lastValueFrom(
-      new Observable<AuthResponse | Error>((observer) => {
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential: UserCredential) => {
-            const resp: AuthResponse = userCredential['_tokenResponse'];
 
-            this.handleAuthentification(
-              userCredential.user.email,
-              userCredential.user.uid,
-              resp.idToken,
-              +resp.expiresIn
-            );
-            observer.next(resp);
-            observer.complete();
-          })
-          .catch((error) => {
-            observer.error(this.handleErrors(error));
-          });
-      })
-    );
-  }
-
-  async login(email: string, password: string) {
-    const auth = getAuth();
-
-    return lastValueFrom(
-      new Observable<AuthResponse | Error>((observer) => {
-        signInWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-            // Signed in
-            const resp: AuthResponse = userCredential['_tokenResponse'];
-            this.handleAuthentification(
-              userCredential.user.email,
-              userCredential.user.uid,
-              resp.idToken,
-              +resp.expiresIn
-            );
-            observer.next(resp);
-            observer.complete();
-            // ...
-          })
-          .catch((error) => {
-            observer.error(this.handleErrors(error));
-          });
-      })
-    );
-  }
 
   autoLogin() {
     const userData = JSON.parse(localStorage.getItem('userData'));
@@ -134,7 +85,7 @@ export class AuthService {
 
     if (loadedUser.token) {
       this.store.dispatch(
-        AuthActions.login({
+        AuthActions.authenticateSuccess({
           email: loadedUser.email,
           userId: loadedUser.id,
           token: loadedUser.token,
@@ -150,7 +101,7 @@ export class AuthService {
 
   private autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
+      // this.logout();
     }, expirationDuration);
   }
 
@@ -163,7 +114,7 @@ export class AuthService {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
     this.store.dispatch(
-      AuthActions.login({
+      AuthActions.authenticateSuccess({
         email: email,
         userId: userId,
         token: token,
@@ -174,54 +125,4 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  private handleErrors(error) {
-    switch (error.code) {
-      case 'auth/email-already-in-use':
-        return new Error('E-Mail bereits verwendet');
-        break;
-      case 'auth/invalid-email':
-        return new Error('Ungültige E-Mail');
-        break;
-      case 'auth/user-disabled':
-        return new Error('Benutzer deaktiviert');
-        break;
-      case 'auth/invalid-credential':
-        return new Error('Ungültige Anmeldeinformationen');
-        break;
-      case 'auth/operation-not-allowed':
-        return new Error('Operation nicht erlaubt');
-        break;
-      case 'auth/weak-password':
-        return new Error('Schwaches Passwort');
-        break;
-      case 'auth/user-not-found':
-        return new Error('Benutzer nicht gefunden');
-        break;
-      case 'auth/wrong-password':
-        return new Error('Falsches Passwort');
-        break;
-      case 'auth/too-many-requests':
-        return new Error('Zu viele Anfragen');
-        break;
-
-      default:
-        return new Error('Ein Fehler ist aufgetreten');
-        break;
-    }
-  }
-
-  public logout() {
-    const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        this.store.dispatch(AuthActions.logout());
-        this.router.navigate(['/auth']);
-        localStorage.removeItem('userData');
-        if (this.tokenExpirationTimer) {
-          clearTimeout(this.tokenExpirationTimer);
-        }
-        this.tokenExpirationTimer = null;
-      })
-      .catch((error) => {});
-  }
 }
