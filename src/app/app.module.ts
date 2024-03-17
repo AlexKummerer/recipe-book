@@ -17,8 +17,8 @@ import * as fromApp from './store/app.reducer';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth/store/auth.effects';
-import { FirestoreModule } from '@angular/fire/firestore'; // Import AngularFirestoreModule.
-
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, NavbarToggleDirective],
@@ -35,6 +35,8 @@ import { FirestoreModule } from '@angular/fire/firestore'; // Import AngularFire
     CoreModule,
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+    StoreRouterConnectingModule.forRoot(),
 
     ],
 

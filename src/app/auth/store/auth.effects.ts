@@ -12,11 +12,10 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { User } from '../user.model';
-import { Firestore } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
-import { environment } from '../../../environments/environment';
+import { environmentProd } from '../../../environments/environment.prod';
 
-initializeApp(environment.firebaseConfig);
+initializeApp(environmentProd.firebaseConfig);
 
 @Injectable()
 export class AuthEffects {
