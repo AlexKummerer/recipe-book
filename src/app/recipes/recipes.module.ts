@@ -7,10 +7,9 @@ import { RecipeStartComponent } from './recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipe-edit/recipe-edit.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { CommonModule } from '@angular/common';
-import { RecipeResolverService } from './recipe-resolver.service';
+
+
 import { RecipesRoutingModule } from './recipes-routing.module';
-import { RecipeService } from './recipe.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptorService } from '../auth/auth-interceptor';
 import { DropdownDirective } from '../shared/dropdown.directive';

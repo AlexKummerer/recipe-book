@@ -65,6 +65,7 @@ export class AuthEffects {
       userId: userId,
       token: token,
       expirationDate: expirationDate,
+      redirect: true,
     });
   };
 
@@ -103,8 +104,10 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.AUTHENTICATE_SUCCESS),
-        tap(() => {
-          this.router.navigate(['/']);
+        tap((authSuccessAction: any) => {
+          if (authSuccessAction.redirect) {
+            this.router.navigate(['/']);
+          }
         })
       ),
     { dispatch: false }
@@ -141,6 +144,7 @@ export class AuthEffects {
             userId: loadedUser.id,
             token: loadedUser.token,
             expirationDate: new Date(userData._tokenExpirationDate),
+            redirect: false,
           });
         }
         return { type: 'DUMMY' };
